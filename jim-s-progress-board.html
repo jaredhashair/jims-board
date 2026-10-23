@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>The Comeback Classic — Jim's Progress Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #0c3520;
+        --surface: #fdfaf0;
+        --surface-2: #efe8d3;
+        --ink: #1e2b1f;
+        --ink-soft: #4d5a4b;
+        --ink-faint: #7e887b;
+        --line: #ded2b6;
+        --line-strong: #b3a67f;
+        --fairway: #17572e;
+        --fairway-deep: #0e3d22;
+        --fairway-bright: #2e7d43;
+        --fairway-pale: #e3edda;
+        --panel-head: #0e3d22;
+        --azalea: #b83e5c;
+        --azalea-deep: #96304a;
+        --gold: #a8842a;
+        --gold-bright: #e6c86a;
+        --gold-pale: #f3e8c8;
+        --on-green: #f8f2df;
+        --on-green-soft: #ccd6bf;
+        --on-green-faint: #9db091;
+        --hole-empty: #fffef9;
+        --shadow: 0 1px 2px rgba(4,24,12,.25), 0 10px 28px rgba(4,24,12,.32);
+        --radius: 14px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #071f12;
+          --surface: #143324;
+          --surface-2: #1d4630;
+          --ink: #f0ecd9;
+          --ink-soft: #c3cdb4;
+          --ink-faint: #93a58b;
+          --line: #2c5741;
+          --line-strong: #48755a;
+          --fairway: #3f9e63;
+          --fairway-deep: #93d3a4;
+          --fairway-bright: #46a563;
+          --fairway-pale: #1d4630;
+          --panel-head: #0a2a18;
+          --azalea: #e0788f;
+          --azalea-deep: #ff9db1;
+          --gold: #d9b64a;
+          --gold-bright: #e6c86a;
+          --gold-pale: #3a3319;
+          --on-green: #f8f2df;
+          --on-green-soft: #ccd6bf;
+          --on-green-faint: #8fa583;
+          --hole-empty: #143324;
+          --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.4);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.022) 0 90px, rgba(0,0,0,.028) 90px 180px);
+        color: var(--ink);
+        font-family: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+        line-height: 1.45;
+        padding-bottom: 40px;
+      }
+      .top-stripe { height: 6px; background: var(--gold-bright); border-bottom: 2px solid var(--azalea); }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+      /* ---------- Header ---------- */
+      header { text-align: center; padding: 28px 8px 6px; }
+      .event-line {
+        display: inline-flex; align-items: center; gap: 10px;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 13px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+        color: var(--gold-bright);
+      }
+      .event-line::before, .event-line::after {
+        content: ""; width: 28px; height: 1px; background: var(--gold-bright); opacity: .7;
+      }
+      h1 {
+        font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+        font-size: clamp(42px, 10vw, 68px);
+        font-weight: 700; line-height: 1.02; letter-spacing: .015em;
+        text-transform: uppercase;
+        margin: 12px 0 4px;
+        color: var(--on-green);
+      }
+      .subtitle { font-size: 17px; color: var(--on-green-soft); margin: 6px 0 0; }
+      .subtitle strong { color: var(--on-green); }
+      .tee-line {
+        margin-top: 12px; font-size: 13.5px; color: var(--on-green-faint);
+        display: inline-flex; align-items: center; gap: 7px;
+      }
+      .tee-line svg { flex: none; }
+
+      /* ---------- Progress ---------- */
+      .progress-card {
+        margin-top: 22px; background: var(--surface); border: 1px solid var(--line);
+        border-top: 3px solid var(--gold);
+        border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 18px 16px;
+      }
+      .progress-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .progress-count {
+        font-family: "Playfair Display", Georgia, serif; font-size: 36px; font-weight: 700; line-height: 1;
+        color: var(--ink);
+      }
+      .progress-count .of { color: var(--ink-faint); font-size: 22px; font-weight: 600; }
+      .progress-pct {
+        font-family: "Barlow Condensed", sans-serif; font-size: 20px; font-weight: 600; color: var(--fairway);
+      }
+      .progress-sub { margin: 4px 0 0; font-size: 15px; color: var(--ink-soft); }
+      .bar-track {
+        margin-top: 12px; height: 14px; border-radius: 999px;
+        background: var(--surface-2); border: 1px solid var(--line); overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%; width: 0%;
+        background: var(--gold);
+        border-radius: 999px;
+        transition: width .45s ease;
+      }
+      .status-line { margin-top: 10px; font-size: 14.5px; font-weight: 600; color: var(--fairway-deep); }
+      @media (prefers-color-scheme: dark) { .status-line { color: var(--fairway-deep); } }
+      .hint { margin-top: 4px; font-size: 13px; color: var(--ink-faint); }
+
+      /* ---------- Scorecard ---------- */
+      .card-section { margin-top: 26px; }
+      .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+      .card-head h2 {
+        font-family: "Playfair Display", Georgia, serif; font-size: 24px; font-weight: 700;
+        letter-spacing: .05em; text-transform: uppercase; margin: 0; color: var(--on-green);
+      }
+      .card-head span { font-size: 13px; color: var(--on-green-faint); text-align: right; }
+
+      .scorecard {
+        background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius);
+        box-shadow: var(--shadow); overflow: hidden;
+      }
+      .sc-grid { display: grid; grid-template-columns: 78px repeat(5, 1fr); }
+      .sc-head {
+        font-family: "Barlow Condensed", sans-serif; font-size: 13px; font-weight: 700;
+        letter-spacing: .12em; text-transform: uppercase; text-align: center;
+        padding: 9px 2px 7px; color: var(--on-green);
+        background: var(--panel-head); border-bottom: 2px solid var(--gold);
+      }
+      .sc-head.week-col { text-align: left; padding-left: 10px; }
+      .week-label {
+        display: flex; flex-direction: column; justify-content: center; gap: 1px;
+        padding: 8px 4px 8px 10px; border-bottom: 1px solid var(--line);
+        font-family: "Barlow Condensed", sans-serif;
+      }
+      .week-label .wk { font-size: 15px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink); line-height: 1.1; }
+      .week-label .wk-sub { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+      .week-label.done .wk { color: var(--fairway); }
+      .week-label.done .wk-sub { color: var(--fairway); }
+      .week-row-last .week-label, .week-row-last .hole { border-bottom: none; }
+
+      button.hole {
+        appearance: none; -webkit-appearance: none;
+        font: inherit; cursor: pointer;
+        background: var(--hole-empty);
+        border: none; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line);
+        min-height: 74px; padding: 8px 2px 7px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+        color: var(--ink); position: relative;
+        transition: background .18s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      button.hole:focus-visible { outline: 3px solid var(--azalea); outline-offset: -3px; z-index: 2; }
+      button.hole:active { filter: brightness(.96); }
+      .hole .hole-label {
+        font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint);
+      }
+      .hole .hole-num {
+        font-family: "Playfair Display", Georgia, serif; font-size: 30px; font-weight: 700; line-height: 1;
+      }
+      .hole .hole-state { height: 16px; display: flex; align-items: center; justify-content: center; }
+      .hole .cup {
+        width: 13px; height: 13px; border-radius: 50%;
+        border: 2px solid var(--line-strong); background: transparent;
+      }
+      .hole .check { display: none; }
+      .hole .mile {
+        font-size: 9.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+        color: var(--azalea); line-height: 1.15; text-align: center; padding: 0 2px;
+      }
+      /* Sunk state */
+      button.hole.sunk { background: var(--fairway); color: #fff; }
+      button.hole.sunk .hole-label { color: rgba(255,255,255,.75); }
+      button.hole.sunk .cup { display: none; }
+      button.hole.sunk .check { display: block; }
+      button.hole.sunk .mile { color: #ffe9a8; }
+      @media (hover: hover) {
+        button.hole:not(.sunk):hover { background: var(--fairway-pale); }
+      }
+
+      /* ---------- Milestones ---------- */
+      .milestones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+      .mile-card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+        padding: 10px 12px; opacity: .55;
+      }
+      .mile-card.hit { opacity: 1; border-color: var(--fairway); }
+      .mile-card .m-hole {
+        font-family: "Barlow Condensed", sans-serif; font-size: 13px; font-weight: 700;
+        letter-spacing: .1em; text-transform: uppercase; color: var(--azalea);
+      }
+      .mile-card .m-name { font-weight: 700; font-size: 15px; margin-top: 1px; }
+      .mile-card .m-desc { font-size: 13px; color: var(--ink-soft); margin-top: 1px; }
+      .mile-card .m-state { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); margin-top: 5px; }
+      .mile-card.hit .m-state { color: var(--fairway); }
+
+      /* ---------- 19th Hole ---------- */
+      .clubhouse {
+        margin-top: 22px; border-radius: var(--radius); padding: 22px 18px;
+        border: 2px dashed var(--gold); background: var(--surface);
+        text-align: center;
+      }
+      .clubhouse .ch-eyebrow {
+        font-family: "Barlow Condensed", sans-serif; font-size: 13px; font-weight: 700;
+        letter-spacing: .22em; text-transform: uppercase; color: var(--gold);
+      }
+      .clubhouse h2 {
+        font-family: "Playfair Display", Georgia, serif; font-size: clamp(30px, 7vw, 42px); font-weight: 700;
+        text-transform: uppercase; margin: 4px 0 4px; line-height: 1.05; color: var(--ink);
+      }
+      .clubhouse p { margin: 0 auto; max-width: 46ch; font-size: 15px; color: var(--ink-soft); }
+      .clubhouse .ch-status { margin-top: 10px; font-weight: 700; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-faint); }
+      .clubhouse.unlocked {
+        border: 2px solid var(--gold); background: var(--gold-pale);
+        box-shadow: var(--shadow);
+      }
+      .clubhouse.unlocked .ch-status { color: var(--fairway-deep); }
+      @media (prefers-color-scheme: dark) { .clubhouse.unlocked .ch-status { color: var(--fairway); } }
+
+      /* ---------- Footer / controls ---------- */
+      .rain-note {
+        margin-top: 22px; text-align: center; font-size: 16.5px; font-style: italic; color: var(--on-green-soft);
+        padding: 0 10px;
+      }
+      .rain-note strong { color: var(--gold-bright); font-style: normal; }
+      .controls { margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+      .btn {
+        font: inherit; font-weight: 600; font-size: 14.5px; cursor: pointer;
+        border-radius: 999px; padding: 10px 20px;
+        border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+      }
+      .btn.primary { background: var(--fairway); border-color: var(--fairway); color: #fff; }
+      .btn.danger-armed { background: var(--azalea); border-color: var(--azalea); color: #fff; }
+      .fineprint { margin-top: 14px; text-align: center; font-size: 12.5px; color: var(--on-green-faint); }
+
+      @media (max-width: 480px) {
+        .sc-grid { grid-template-columns: 60px repeat(5, 1fr); }
+        .week-label { padding-left: 7px; }
+        .week-label .wk { font-size: 12.5px; white-space: nowrap; }
+        .sc-head.week-col { padding-left: 7px; font-size: 12px; }
+        .week-label .wk-sub { display: none; }
+        button.hole { min-height: 68px; }
+        .hole .hole-num { font-size: 26px; }
+        .hole .mile { font-size: 8.5px; }
+        .milestones { grid-template-columns: 1fr; }
+        .mile-card { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .mile-card .m-state { margin-top: 0; margin-left: auto; }
+      }
+
+      /* ---------- Print ---------- */
+      @media print {
+        :root {
+          --bg: #fff; --surface: #fff; --surface-2: #f0ead8; --ink: #142114; --ink-soft: #3c4a3c;
+          --ink-faint: #5c6a5c; --line: #c9c2ab; --line-strong: #9a9377;
+          --fairway: #1c5c2e; --fairway-deep: #123d1f; --fairway-bright: #1c5c2e; --fairway-pale: #e4efdf;
+          --panel-head: #123d1f;
+          --azalea: #9c2f4b; --gold: #8a6b1d; --gold-bright: #8a6b1d; --gold-pale: #faf3da; --hole-empty: #fff;
+          --on-green: #f3ecd7; --on-green-soft: #3c4a3c; --on-green-faint: #5c6a5c;
+          --shadow: none;
+        }
+        body { padding-bottom: 0; background: #fff; background-image: none; }
+        h1 { color: #123d1f; }
+        .event-line { color: #8a6b1d; }
+        .event-line::before, .event-line::after { background: #8a6b1d; }
+        .subtitle { color: #3c4a3c; }
+        .subtitle strong { color: #142114; }
+        .tee-line { color: #5c6a5c; }
+        .card-head h2 { color: #142114; }
+        .card-head span { color: #5c6a5c; }
+        .rain-note { color: #3c4a3c; }
+        .rain-note strong { color: #123d1f; }
+        .wrap { max-width: none; padding: 0; }
+        header { padding-top: 10px; }
+        .controls, .hint, .fineprint { display: none !important; }
+        .progress-card, .scorecard, .clubhouse, .mile-card { box-shadow: none; }
+        button.hole { cursor: default; }
+        button.hole.sunk { background: var(--fairway) !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .bar-fill, .sc-head, .clubhouse.unlocked, .top-stripe { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .clubhouse { break-inside: avoid; }
+        .scorecard { break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-stripe" aria-hidden="true"></div>
+    <div class="wrap">
+
+      <header>
+        <span class="event-line">A 35-Hole Tournament</span>
+        <h1>The Comeback Classic</h1>
+        <p class="subtitle"><strong>Jim's Progress Board</strong> — one treatment, one hole. Sink them all.</p>
+        <div>
+          <span class="tee-line">
+            <svg width="13" height="15" viewBox="0 0 13 15" fill="none" aria-hidden="true"><path d="M2 14V1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M2 1.5 11 3.5 2 5.8Z" fill="#d9a72e"/></svg>
+            Teed off: Oct 19, 2026
+          </span>
+        </div>
+      </header>
+
+      <section class="progress-card" aria-label="Overall progress">
+        <div class="progress-top">
+          <div class="progress-count"><span id="countSunk">0</span> <span class="of">of 35 sunk</span></div>
+          <div class="progress-pct" id="countPct">0%</div>
+        </div>
+        <p class="progress-sub" id="countSub">35 to play</p>
+        <div class="bar-track" role="progressbar" aria-label="Treatments completed" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0" id="barTrack">
+          <div class="bar-fill" id="barFill"></div>
+        </div>
+        <p class="status-line" id="statusLine">On the first tee. One hole at a time.</p>
+        <p class="hint">Tap a hole on the scorecard to sink it. Tap it again to undo. Your board saves on this phone automatically.</p>
+      </section>
+
+      <section class="card-section" aria-label="Scorecard">
+        <div class="card-head">
+          <h2>Scorecard</h2>
+          <span>7 rounds &middot; 5 holes each</span>
+        </div>
+        <div class="scorecard">
+          <div class="sc-grid" id="scorecardGrid" role="group" aria-label="Treatment holes 1 to 35"></div>
+        </div>
+
+        <div class="milestones" aria-label="Milestones">
+          <div class="mile-card" id="mile9">
+            <div class="m-hole">Hole 9</div>
+            <div class="m-name">Front 9 Done</div>
+            <div class="m-desc">First nine in the book.</div>
+            <div class="m-state">Not yet</div>
+          </div>
+          <div class="mile-card" id="mile18">
+            <div class="m-hole">Hole 18</div>
+            <div class="m-name">The Turn</div>
+            <div class="m-desc">Halfway home.</div>
+            <div class="m-state">Not yet</div>
+          </div>
+          <div class="mile-card" id="mile35">
+            <div class="m-hole">Hole 35</div>
+            <div class="m-name">Final Hole</div>
+            <div class="m-desc">Last treatment. Then the clubhouse.</div>
+            <div class="m-state">Not yet</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="clubhouse" id="clubhouse" aria-label="The 19th hole">
+        <div class="ch-eyebrow">The Clubhouse</div>
+        <h2>The 19th Hole</h2>
+        <p>This is where the tournament ends: treatment complete, clubs put away, first round of drinks is on us. Sink hole 35 and this is home.</p>
+        <div class="ch-status" id="clubhouseStatus">Locked — 35 holes to play</div>
+      </section>
+
+      <p class="rain-note">Miss a day? That's just a <strong>rain delay</strong>. Pick up on the next hole.</p>
+
+      <div class="controls">
+        <button class="btn" id="resetBtn" type="button">Reset board</button>
+      </div>
+      <p class="fineprint">Progress is saved in this browser on this device only. To hang it on the wall, use your browser's Print (or Share, then Print) — the board prints clean, ready for a marker.</p>
+
+    </div>
+
+    <script>
+      (function () {
+        var TOTAL = 35;
+        var STORAGE_KEY = "comeback-classic-jim-v1";
+        var MILESTONES = {
+          9: "Front 9",
+          18: "The Turn",
+          35: "Final Hole"
+        };
+
+        var grid = document.getElementById("scorecardGrid");
+        var countSunkEl = document.getElementById("countSunk");
+        var countPctEl = document.getElementById("countPct");
+        var countSubEl = document.getElementById("countSub");
+        var barFill = document.getElementById("barFill");
+        var barTrack = document.getElementById("barTrack");
+        var statusLine = document.getElementById("statusLine");
+        var clubhouse = document.getElementById("clubhouse");
+        var clubhouseStatus = document.getElementById("clubhouseStatus");
+
+        // ---- Load saved state (fail quietly if storage is unavailable) ----
+        var sunk = {};
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            var arr = JSON.parse(raw);
+            if (Array.isArray(arr)) {
+              arr.forEach(function (n) {
+                if (typeof n === "number" && n >= 1 && n <= TOTAL) sunk[n] = true;
+              });
+            }
+          }
+        } catch (e) { /* storage blocked: board still works for this visit */ }
+
+        function save() {
+          try {
+            var arr = Object.keys(sunk).map(Number).sort(function (a, b) { return a - b; });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+          } catch (e) { /* ignore */ }
+        }
+
+        // ---- Build the scorecard ----
+        var holeButtons = {};
+        var weekLabels = {};
+
+        // Header row (no weekday labels — holes are sunk in order, whenever they happen)
+        var corner = document.createElement("div");
+        corner.className = "sc-head week-col";
+        corner.textContent = "Round";
+        grid.appendChild(corner);
+        for (var hc = 0; hc < 5; hc++) {
+          var hcell = document.createElement("div");
+          hcell.className = "sc-head";
+          hcell.setAttribute("aria-hidden", "true");
+          grid.appendChild(hcell);
+        }
+
+        for (var week = 1; week <= 7; week++) {
+          var label = document.createElement("div");
+          label.className = "week-label" + (week === 7 ? "" : "");
+          label.innerHTML = '<span class="wk">Round ' + week + '</span><span class="wk-sub" data-wksub>Holes ' +
+            ((week - 1) * 5 + 1) + "&ndash;" + (week * 5) + "</span>";
+          grid.appendChild(label);
+          weekLabels[week] = label;
+
+          for (var d = 0; d < 5; d++) {
+            var n = (week - 1) * 5 + d + 1;
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "hole" + (week === 7 ? " last-row" : "");
+            btn.setAttribute("data-hole", String(n));
+            btn.setAttribute("aria-pressed", "false");
+            var mileText = MILESTONES[n] ? '<span class="mile">' + MILESTONES[n] + "</span>" : "";
+            btn.innerHTML =
+              '<span class="hole-label">Hole</span>' +
+              '<span class="hole-num">' + n + "</span>" +
+              '<span class="hole-state">' +
+                '<span class="cup" aria-hidden="true"></span>' +
+                '<svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8.5 6.2 12 13.5 4" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              "</span>" + mileText;
+            btn.setAttribute("aria-label", "Hole " + n + (MILESTONES[n] ? ", " + MILESTONES[n] : "") + ". Not yet played. Tap to mark sunk.");
+            (function (holeNum, button) {
+              button.addEventListener("click", function () {
+                if (sunk[holeNum]) { delete sunk[holeNum]; } else { sunk[holeNum] = true; }
+                save();
+                render();
+              });
+            })(n, btn);
+            grid.appendChild(btn);
+            holeButtons[n] = btn;
+          }
+        }
+        // remove bottom border on last row cells
+        var lastRowCells = grid.querySelectorAll(".last-row");
+        lastRowCells.forEach(function (c) { c.style.borderBottom = "none"; });
+        if (weekLabels[7]) weekLabels[7].style.borderBottom = "none";
+
+        function statusFor(count) {
+          if (count === 0) return "On the first tee. One hole at a time.";
+          if (count < 9) return "Finding the rhythm. Fairways and greens.";
+          if (count === 9) return "Front 9 done. Nice playing, Jim.";
+          if (count < 18) return "On the back 9 now. Keep it steady.";
+          if (count === 18) return "The Turn — halfway home.";
+          if (count < 27) return "Deep in the back 9. Still swinging.";
+          if (count < 35) return "Coming down the stretch. Almost home.";
+          return "In the clubhouse. Tournament won.";
+        }
+
+        function render() {
+          var count = Object.keys(sunk).length;
+          var left = TOTAL - count;
+          var pct = Math.round((count / TOTAL) * 100);
+
+          countSunkEl.textContent = String(count);
+          countPctEl.textContent = pct + "%";
+          countSubEl.textContent = left === 0 ? "All 35 sunk — tournament complete" : left + " to play";
+          barFill.style.width = pct + "%";
+          barTrack.setAttribute("aria-valuenow", String(count));
+          statusLine.textContent = statusFor(count);
+
+          for (var n = 1; n <= TOTAL; n++) {
+            var b = holeButtons[n];
+            var isSunk = !!sunk[n];
+            b.classList.toggle("sunk", isSunk);
+            b.setAttribute("aria-pressed", isSunk ? "true" : "false");
+            b.setAttribute("aria-label",
+              "Hole " + n + (MILESTONES[n] ? ", " + MILESTONES[n] : "") +
+              (isSunk ? ". Sunk. Tap to undo." : ". Not yet played. Tap to mark sunk."));
+          }
+
+          for (var w = 1; w <= 7; w++) {
+            var all = true;
+            for (var k = (w - 1) * 5 + 1; k <= w * 5; k++) { if (!sunk[k]) { all = false; break; } }
+            weekLabels[w].classList.toggle("done", all);
+            var sub = weekLabels[w].querySelector("[data-wksub]");
+            if (sub) sub.textContent = all ? "Complete" : "Holes " + ((w - 1) * 5 + 1) + "\u2013" + (w * 5);
+          }
+
+          [9, 18, 35].forEach(function (m) {
+            var card = document.getElementById("mile" + m);
+            var hit = !!sunk[m];
+            card.classList.toggle("hit", hit);
+            card.querySelector(".m-state").textContent = hit ? "Done" : "Not yet";
+          });
+
+          if (count === TOTAL) {
+            clubhouse.classList.add("unlocked");
+            clubhouseStatus.textContent = "Unlocked — treatment complete. Welcome to the clubhouse, Jim.";
+          } else {
+            clubhouse.classList.remove("unlocked");
+            clubhouseStatus.textContent = "Locked — " + left + (left === 1 ? " hole" : " holes") + " to play";
+          }
+        }
+
+        render();
+
+        // ---- Controls ----
+        var resetBtn = document.getElementById("resetBtn");
+        var armed = false;
+        var armTimer = null;
+        resetBtn.addEventListener("click", function () {
+          if (!armed) {
+            armed = true;
+            resetBtn.textContent = "Tap again to clear all 35 holes";
+            resetBtn.classList.add("danger-armed");
+            armTimer = setTimeout(function () {
+              armed = false;
+              resetBtn.textContent = "Reset board";
+              resetBtn.classList.remove("danger-armed");
+            }, 4000);
+            return;
+          }
+          clearTimeout(armTimer);
+          armed = false;
+          sunk = {};
+          save();
+          render();
+          resetBtn.textContent = "Reset board";
+          resetBtn.classList.remove("danger-armed");
+        });
+      })();
+    </script>
+  </body>
+</html>
